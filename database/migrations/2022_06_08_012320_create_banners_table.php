@@ -21,9 +21,10 @@ class CreateBannersTable extends Migration
             $table->boolean('status');
             $table->unsignedInteger('file_id');
             $table->integer('target');
-            $table->integer('lang');
+            $table->unsignedInteger('lang');
             $table->string('lang_hash');
             $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('lang')->references('id')->on('lenguags');
             $table->timestamps();
         });
     }

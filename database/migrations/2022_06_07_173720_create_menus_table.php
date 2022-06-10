@@ -18,9 +18,11 @@ class CreateMenusTable extends Migration
             $table->string('title');
             $table->string('alias');
             $table->string('type')->nullable();
-            $table->integer('lang');
+            $table->unsignedInteger('lang');
             $table->string('lang_hash');
             $table->boolean('status');
+            $table->foreign('lang')->references('id')->on('lenguags');
+
 
 
 //            $table->timestamps('deleted_at');

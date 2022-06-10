@@ -21,10 +21,11 @@ class CreateSettingsTable extends Migration
             $table->string('link');
             $table->string('alies');
             $table->string('lang_hash')->nullable();
-            $table->integer('lang')->nullable();
+            $table->unsignedInteger('lang');
             $table->integer('sort')->nullable();
             $table->boolean('status');
             $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('lang')->references('id')->on('languages');
             $table->timestamps();
         });
     }
