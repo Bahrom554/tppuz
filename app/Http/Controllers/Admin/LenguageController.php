@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 class LenguageController extends Controller
 {
     public function index()
-    { return 1;
+    {
         $lengs = Lenguage::all();
 
         return $lengs;

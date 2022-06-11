@@ -35,8 +35,8 @@ Route::group(['prefix'=>'admin', 'middleware' => 'auth:api','namespace'=>'Admin'
     Route::resource('settings', 'SettingController');
     Route::resource('posts','PostController');
     Route::resource('links','UsefulLinkController');
-    Route::resource('lenguages','LenguageController');
-    Route::resource('region','RegionController');
+    Route::resource('languages','LenguageController');
+    Route::resource('regions','RegionController');
     Route::resource('banners','BannerController');
     Route::resource('widgets','WidgetController');
     Route::resource('histories','HistoryController');

@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Region;
 use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class RegionController extends Controller
 {

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Links\LinkRequest;
-use App\Http\Resources\Link\LinkResource;
+use App\Http\Requests\Station\StationRequest;
+use App\Http\Resources\Station\StationResource;
 use App\Http\UseCases\File\FileService;
-use App\Http\UseCases\Link\LinkService;
-use App\Useful_link;
+use App\Http\UseCases\Station\StationService;
+use App\Station;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
-class UsefulLinkController extends Controller
+class StationController extends Controller
 {
     private $service;
     private $fileservice;
-    public function __construct(LinkService  $service, FileService $fileservice)
+    public function __construct(StationService  $service, FileService $fileservice)
     {
         $this->service = $service;
         $this->fileservice =$fileservice;
@@ -27,8 +27,9 @@ class UsefulLinkController extends Controller
      */
     public function index()
     {
-        $links = Useful_link::orderBy('id', 'desc')->paginate(20);
-        return LinkResource::collection($links);
+        $stations=Station::orderBy('id','desc')->paginate(20);
+        return StationResource::collection($stations);
+
     }
 
     /**
@@ -45,25 +46,26 @@ class UsefulLinkController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return LinkResource
+     * @return StationResource
      */
-    public function store(Request $request)
+    public function store(StationRequest $request)
     {
         $file_id= $this->fileservice->create($request);
         $request['file_id']= $file_id;
-        $link =$this->service->create($request);
-        return new LinkResource($link);
+        $station =$this->service->create($request);
+        return new StationResource($station);
+
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return LinkResource
+     * @return StationResource
      */
-    public function show(Useful_link $link)
+    public function show(Station $station)
     {
-        return new LinkResource($link);
+        return new StationResource($station);
     }
 
     /**
@@ -82,12 +84,12 @@ class UsefulLinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return LinkResource
+     * @return StationResource
      */
-    public function update(LinkRequest $request, Useful_link $link)
+    public function update(StationRequest $request, Station $station)
     {
-        $this->service->edit($link->id, $request);
-        return  new LinkResource(Banner::findOrFail($link->id));
+        $this->service->edit($station->id, $request);
+        return new StationResource(Station::findOrFail($station->id));
 
     }
 
@@ -97,9 +99,10 @@ class UsefulLinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Useful_link $link)
+    public function destroy(Station $station)
     {
-        $this->service->remove($link->id);
+        $this->service->remove($station->id);
         return response()->json([], Response::HTTP_NO_CONTENT);
+
     }
 }

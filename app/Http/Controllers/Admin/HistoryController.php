@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Links\LinkRequest;
-use App\Http\Resources\Link\LinkResource;
+use App\History;
+use App\Http\Requests\History\HistoryRequest;
+use App\Http\Resources\History\HistoryResource;
+use App\Http\Resources\post\PostResource;
 use App\Http\UseCases\File\FileService;
-use App\Http\UseCases\Link\LinkService;
-use App\Useful_link;
+use App\Http\UseCases\History\HistoryService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
-class UsefulLinkController extends Controller
+class HistoryController extends Controller
 {
     private $service;
     private $fileservice;
-    public function __construct(LinkService  $service, FileService $fileservice)
+    public function __construct(HistoryService  $service, FileService $fileservice)
     {
         $this->service = $service;
         $this->fileservice =$fileservice;
@@ -23,12 +24,12 @@ class UsefulLinkController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $links = Useful_link::orderBy('id', 'desc')->paginate(20);
-        return LinkResource::collection($links);
+        $histories =History::orderBy('id','desc')->paginate(20);
+        return HistoryResource::collection($histories);
     }
 
     /**
@@ -45,25 +46,24 @@ class UsefulLinkController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return LinkResource
+     * @return PostResource
      */
-    public function store(Request $request)
-    {
-        $file_id= $this->fileservice->create($request);
+    public function store(HistoryRequest $request)
+    {    $file_id= $this->fileservice->create($request);
         $request['file_id']= $file_id;
-        $link =$this->service->create($request);
-        return new LinkResource($link);
+        $post =$this->service->create($request);
+        return new PostResource($post);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return LinkResource
+     * @return HistoryResource
      */
-    public function show(Useful_link $link)
+    public function show(History $history)
     {
-        return new LinkResource($link);
+        return new HistoryResource($history);
     }
 
     /**
@@ -82,13 +82,12 @@ class UsefulLinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return LinkResource
+     * @return HistoryResource
      */
-    public function update(LinkRequest $request, Useful_link $link)
+    public function update(HistoryRequest $request, History $history)
     {
-        $this->service->edit($link->id, $request);
-        return  new LinkResource(Banner::findOrFail($link->id));
-
+        $this->service->edit($history->id, $request);
+        return  new HistoryResource(History::findOrFail($history->id));
     }
 
     /**
@@ -97,9 +96,9 @@ class UsefulLinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Useful_link $link)
+    public function destroy(History $history)
     {
-        $this->service->remove($link->id);
+        $this->service->remove($history->id);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
