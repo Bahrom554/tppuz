@@ -20,7 +20,7 @@ class CreateWidgetItemsTable extends Migration
             $table->string('description');
             $table->integer('sort');
             $table->boolean('status');
-            $table->unsignedInteger('parent_id');
+            $table->unsignedInteger('parent_id')->nullable();
             $table->foreign('file_id')->references('id')->on('files');
             $table->foreign('parent_id')->references('id')->on('widgets')->onDelete('cascade');
             $table->timestamps();
