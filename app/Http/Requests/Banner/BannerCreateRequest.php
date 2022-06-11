@@ -13,8 +13,7 @@ class BannerCreateRequest extends FormRequest
             'link' => 'required|string|max:1024',
             'sort' => 'required',
             'target' => 'required',
-            'lang' => 'required',
-            'lang_hash' => 'required|string',
+            'lang' => 'required'
 
 
         ];

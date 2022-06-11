@@ -29,7 +29,7 @@ class CreateStationsTable extends Migration
             $table->string('long');
             $table->foreign('region_id')->references('id')->on('regions');
             $table->foreign('file_id')->references('id')->on('files');
-            $table->foreign('lang')->references('id')->on('lenguags');
+            $table->foreign('lang')->references('id')->on('lenguages');
 
             $table->timestamps();
         });

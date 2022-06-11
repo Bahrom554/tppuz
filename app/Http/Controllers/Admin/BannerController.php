@@ -4,16 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Banner;
 use App\Http\Requests\Banner\BannerCreateRequest;
+use App\Http\Requests\Banner\BannerEditRequest;
 use App\Http\Resources\Banner\BannerResource;
+use App\Http\UseCases\Banner\BannerService;
+use App\Http\UseCases\File\FileService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
+
 
 class BannerController extends Controller
 {
     private $service;
-    public function __construct(BunnerService $service)
+    private $fileservice;
+    public function __construct(BannerService  $service, FileService $fileservice)
     {
         $this->service = $service;
+        $this->fileservice =$fileservice;
     }
 
     /**
@@ -41,10 +48,11 @@ class BannerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return BannerResource
      */
     public function store(BannerCreateRequest $request)
-    {
+    {    $file_id= $this->fileservice->create($request);
+        $request['file_id']= $file_id;
         $banner =$this->service->create($request);
         return new BannerResource($banner);
     }
@@ -53,11 +61,11 @@ class BannerController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return BannerResource
      */
-    public function show($id)
+    public function show(Banner $banner)
     {
-        //
+        return new BannerResource($banner);
     }
 
     /**
@@ -76,21 +84,24 @@ class BannerController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return BannerResource
      */
-    public function update(Request $request, $id)
+    public function update(BannerEditRequest $request, Banner $banner)
     {
-        //
+        $this->service->edit($banner->id, $request);
+        return  new BannerResource(Banner::findOrFail($banner->id));
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Banner $banner)
     {
-        //
+        $this->service->remove($banner->id);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

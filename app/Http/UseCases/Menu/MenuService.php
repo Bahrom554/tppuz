@@ -13,9 +13,10 @@ class MenuService
         $menu = Menu::make([
             'title' => $request['title'],
             'alias' => $request['alias'],
-            'status' => 1,
-            'lang_hash' => 'default',
-            'lang' => $request['lang']
+            'status' => $request['status'],
+            'lang_hash' => $request['lang_hash'],
+            'lang' => $request['lang'],
+            'type'=>$request['type']
         ]);
 
         $menu->saveOrFail();

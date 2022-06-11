@@ -21,7 +21,7 @@ class CreateWidgetsTable extends Migration
             $table->string('lang_hash');
             $table->integer('type');
             $table->boolean('status');
-            $table->foreign('lang')->references('id')->on('lenguags');
+            $table->foreign('lang')->references('id')->on('lenguages');
             $table->timestamps();
         });
     }

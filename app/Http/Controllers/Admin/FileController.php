@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\File;
 use App\Http\Resources\File\FileResource;
 use App\Http\UseCases\File\FileService;
@@ -25,7 +24,8 @@ class FileController extends Controller
     public function upload(Request $request)
     {
 
-        $file = $this->service->create($request);
+        $file_id= $this->service->create($request);
+        $file=File::findOrFail($file_id);
         return new FileResource($file);
 
 
@@ -99,7 +99,7 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 
 

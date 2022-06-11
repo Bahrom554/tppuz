@@ -22,7 +22,7 @@ class CreateMenuItemsTable extends Migration
            $table->integer('sort');
            $table->unsignedInteger('menu_item_parent_id')->nullable();
            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
-           $table->foreign('menu_item_parent_id')->references('id')->on('menu_items');
+           $table->foreign('menu_item_parent_id')->references('id')->on('menu_items')->onDelete('cascade');
             $table->foreign('file_id')->references('id')->on('files');
 //            $table->timestamps('deleted_at');
             $table->timestamps();

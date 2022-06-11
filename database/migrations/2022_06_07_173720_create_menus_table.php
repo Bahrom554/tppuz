@@ -21,7 +21,7 @@ class CreateMenusTable extends Migration
             $table->unsignedInteger('lang');
             $table->string('lang_hash');
             $table->boolean('status');
-            $table->foreign('lang')->references('id')->on('lenguags');
+            $table->foreign('lang')->references('id')->on('lenguages');
 
 
 

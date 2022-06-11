@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu_item extends Model
 {
+    protected $guarded = ['id'];
   protected $dates =['created_at'];
     public function children()
     {
