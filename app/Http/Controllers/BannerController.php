@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class BannerController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
-        $banners = Banner::where('status', 1)->orderBy('id', 'asc')->paginate(15);
+        $banners = Banner::where('status', 1)->where('lang',$request->lang)->orderBy('id', 'asc')->paginate(15);
 
         return BannerResource::collection($banners);
     }

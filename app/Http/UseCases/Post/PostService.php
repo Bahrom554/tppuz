@@ -40,11 +40,9 @@ class PostService
             'top',
             'sort',
             'lang',
-            'lang_hash'
-
-
+            'lang_hash',
+            'file_id'
         ]));
-
     }
 
     public function remove($id)

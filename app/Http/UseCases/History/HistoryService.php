@@ -38,7 +38,8 @@ class HistoryService
             'documents',
             'anons',
             'content',
-            'lang'
+            'lang',
+            'file_id'
 
 
         ]));

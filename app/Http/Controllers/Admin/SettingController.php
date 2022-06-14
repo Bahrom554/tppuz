@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\File;
+use App\Image;
 use App\Http\Requests\Setting\SettingCreateRequest;
 use App\Http\Requests\Setting\SettingEditRequest;
 use App\Http\Resources\Setting\SettingsResource;
@@ -96,8 +96,16 @@ class SettingController extends Controller
      */
     public function update(SettingEditRequest $request, Setting $setting):SettingsResource
     {
+        if($request->hasFile('image')){
+            if($setting->file_id){
+                $this->fileservice->update($request,$setting->file_id);
+            }
+            else{
+                $file_id=$this->fileservice->create($request);
+                $request['file_id']= $file_id;
+            }
+        }
         $this->service->edit($setting->id, $request);
-//        $this->fileservice->edit($setting->file_id, $request);
         return new SettingsResource(Setting::findOrFail($setting->id));
     }
 
@@ -110,6 +118,10 @@ class SettingController extends Controller
     public function destroy(Setting $setting)
     {
         $this->service->remove($setting->id);
+        if($setting->file_id){
+            $file=$this->fileservice->deleteStorage($setting->file_id);
+            $file->delete();
+        }
         return response()->json([], Response::HTTP_NO_CONTENT);
 
     }

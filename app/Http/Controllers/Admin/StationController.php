@@ -6,6 +6,7 @@ use App\Http\Requests\Station\StationRequest;
 use App\Http\Resources\Station\StationResource;
 use App\Http\UseCases\File\FileService;
 use App\Http\UseCases\Station\StationService;
+use App\Image;
 use App\Station;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -88,6 +89,15 @@ class StationController extends Controller
      */
     public function update(StationRequest $request, Station $station)
     {
+        if($request->hasFile('image')){
+            if($station->file_id){
+                $this->fileservice->update($request,$station->file_id);
+            }
+            else{
+                $file_id=$this->fileservice->create($request);
+                $request['file_id']= $file_id;
+            }
+        }
         $this->service->edit($station->id, $request);
         return new StationResource(Station::findOrFail($station->id));
 
@@ -102,6 +112,10 @@ class StationController extends Controller
     public function destroy(Station $station)
     {
         $this->service->remove($station->id);
+        if($station->file_id){
+            $file=$this->fileservice->deleteStorage($station->file_id);
+           $file->delete();
+        }
         return response()->json([], Response::HTTP_NO_CONTENT);
 
     }

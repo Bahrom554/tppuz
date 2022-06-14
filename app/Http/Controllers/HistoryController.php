@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class HistoryController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
-        $banners = History::where('status', 1)->orderBy('id', 'asc')->paginate(15);
+        $banners = History::where('status', 1)->where('lang',$request->lang)->orderBy('id', 'asc')->paginate(15);
 
         return HistoryResource::collection($banners);
     }

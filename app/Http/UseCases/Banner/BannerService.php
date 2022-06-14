@@ -35,7 +35,8 @@ class BannerService
             'link',
             'target',
             'lang',
-            'lang_hash'
+            'lang_hash',
+            'file_id'
 
 
         ]));

@@ -29,7 +29,7 @@ Route::group([],function (){
 
 });
 //'middleware' => 'auth:api',
-Route::group(['prefix'=>'admin', 'middleware' => 'auth:api','namespace'=>'Admin'],function () {
+Route::group(['prefix'=>'admin','middleware' => 'auth:api','namespace'=>'Admin'],function () {
     Route::resource('menus', 'MenuController');
     Route::resource('childmenus','MenuItemController');
     Route::resource('settings', 'SettingController');

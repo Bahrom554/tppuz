@@ -6,7 +6,9 @@ use App\Http\Requests\Post\PostRequest;
 use App\Http\Resources\post\PostResource;
 use App\Http\UseCases\File\FileService;
 use App\Http\UseCases\Post\PostService;
+use App\Image;
 use App\Post;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -85,7 +87,16 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
-        $this->service->edit($post->id, $request);
+         if($request->hasFile('image')){
+            if($post->file_id){
+                $this->fileservice->update($request,$post->file_id);
+            }
+            else{
+                $file_id=$this->fileservice->create($request);
+                $request['file_id']= $file_id;
+            }
+         }
+         $this->service->edit($post->id, $request);
         return  new PostResource(Post::findOrFail($post->id));
 
     }
@@ -98,7 +109,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+
         $this->service->remove($post->id);
+     if($post->file_id){
+        $file=$this->fileservice->deleteStorage($post->file_id);
+         $file->delete();
+     }
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

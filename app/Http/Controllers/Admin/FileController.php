@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\File;
+use App\Image;
 use App\Http\Resources\File\FileResource;
 use App\Http\UseCases\File\FileService;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
@@ -25,7 +27,7 @@ class FileController extends Controller
     {
 
         $file_id= $this->service->create($request);
-        $file=File::findOrFail($file_id);
+        $file=Image::findOrFail($file_id);
         return new FileResource($file);
 
 
@@ -50,11 +52,13 @@ class FileController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return FileResource
      */
     public function store(Request $request)
     {
-
+        $file_id= $this->service->create($request);
+        $file=Image::findOrFail($file_id);
+        return new FileResource($file);
     }
 
     /**
@@ -99,8 +103,16 @@ class FileController extends Controller
      */
     public function destroy($id)
     {
+        $file =Image::findOrFail($id);
+        $path = public_path() . "/uploads/image/" . $file->folder.'/'.$file->file;
+//        File::delete($path);
+        unlink($path);
+//        Storage::delete($path);
+//       Storage::delete(public_path('uploads/image/'.$file->folder.$file->file));
 
+        return 204;
     }
+
 
 
 }

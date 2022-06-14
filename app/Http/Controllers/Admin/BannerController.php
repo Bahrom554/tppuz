@@ -88,6 +88,15 @@ class BannerController extends Controller
      */
     public function update(BannerEditRequest $request, Banner $banner)
     {
+        if($request->hasFile('image')){
+            if($banner->file_id){
+                $this->fileservice->update($request,$banner->file_id);
+            }
+            else{
+                $file_id=$this->fileservice->create($request);
+                $request['file_id']= $file_id;
+            }
+        }
         $this->service->edit($banner->id, $request);
         return  new BannerResource(Banner::findOrFail($banner->id));
 
@@ -102,6 +111,10 @@ class BannerController extends Controller
     public function destroy(Banner $banner)
     {
         $this->service->remove($banner->id);
+        if($banner->file_id){
+            $file= $this->fileservice->deleteStorage($banner->file_id);
+            $file->delete();
+        }
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

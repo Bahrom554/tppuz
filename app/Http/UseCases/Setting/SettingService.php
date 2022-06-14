@@ -37,7 +37,8 @@ class SettingService
             'slug',
             'link',
             'alies',
-            'lang'
+            'lang',
+            'file_id'
 
 
         ]));

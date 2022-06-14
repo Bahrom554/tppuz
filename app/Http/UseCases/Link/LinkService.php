@@ -32,7 +32,8 @@ class LinkService
             'name_en',
             'name_oz',
             'status',
-            'link'
+            'link',
+            'file_id'
 
 
 

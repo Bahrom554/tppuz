@@ -32,7 +32,8 @@ class MenuItemService
             'menu_id',
             'title',
             'url',
-            'sort'
+            'sort',
+            'file_id'
         ]));
 
     }

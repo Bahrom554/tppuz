@@ -19,7 +19,7 @@ class CreateHistoriesTable extends Migration
             $table->string('slug');
             $table->string('description');
             $table->integer('type');
-            $table->unsignedInteger('file_id');
+            $table->unsignedInteger('file_id')->nullable();
             $table->string('documents')->nullable();
             $table->string('anons')->nullable();
             $table->string('content')->nullable();

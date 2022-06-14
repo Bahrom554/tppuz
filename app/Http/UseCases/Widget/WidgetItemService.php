@@ -30,6 +30,7 @@ class WidgetItemService
             'description',
             'sort',
             'status',
+            'file_id'
 
         ]));
 

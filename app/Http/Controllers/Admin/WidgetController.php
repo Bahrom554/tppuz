@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Widget\WidgetRequest;
 use App\Http\Resources\Widget\WidgetResource;
 use App\Http\UseCases\Widget\WidgetService;
+
 use App\Widget;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -97,6 +98,7 @@ class WidgetController extends Controller
     public function destroy(Widget $widget)
     {
         $this->service->remove($widget->id);
+
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

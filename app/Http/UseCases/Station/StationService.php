@@ -44,7 +44,8 @@ class StationService
             'lang',
             'lang_hash',
             'lat',
-            'long'
+            'long',
+            'file_id'
 
 
         ]));

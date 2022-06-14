@@ -7,6 +7,7 @@ use App\Http\Requests\MenuItem\MenuItemEditRequest;
 use App\Http\Resources\Menu\MenuItemResource;
 use App\Http\UseCases\File\FileService;
 use App\Http\UseCases\MenuItem\MenuItemService;
+use App\Image;
 use App\Menu;
 use App\Menu_item;
 use Illuminate\Http\Request;
@@ -98,7 +99,15 @@ class MenuItemController extends Controller
      */
     public function update(MenuItemEditRequest $request, Menu_item $childmenu)
     {
-
+        if($request->hasFile('image')){
+            if($childmenu->file_id){
+                $this->fileservice->update($request,$childmenu->file_id);
+            }
+            else{
+                $file_id=$this->fileservice->create($request);
+                $request['file_id']= $file_id;
+            }
+        }
         $this->service->edit($childmenu->id,$request);
 
          return new MenuItemResource(Menu_item::findOrFail($childmenu->id));
@@ -113,6 +122,10 @@ class MenuItemController extends Controller
     public function destroy(Menu_item $childmenu)
     {
         $this->service->remove($childmenu->id);
+        if($childmenu->file_id){
+            $file=$this->fileservice->deleteStorage($childmenu->file_id);
+           $file->delete();
+        }
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

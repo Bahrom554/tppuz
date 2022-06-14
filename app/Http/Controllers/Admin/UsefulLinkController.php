@@ -6,6 +6,7 @@ use App\Http\Requests\Links\LinkRequest;
 use App\Http\Resources\Link\LinkResource;
 use App\Http\UseCases\File\FileService;
 use App\Http\UseCases\Link\LinkService;
+use App\Image;
 use App\Useful_link;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -85,7 +86,15 @@ class UsefulLinkController extends Controller
      * @return LinkResource
      */
     public function update(LinkRequest $request, Useful_link $link)
-    {
+    {   if($request->hasFile('image')){
+        if($link->file_id){
+            $this->fileservice->update($request,$link->file_id);
+        }
+        else{
+            $file_id=$this->fileservice->create($request);
+            $request['file_id']= $file_id;
+        }
+    }
         $this->service->edit($link->id, $request);
         return  new LinkResource(Banner::findOrFail($link->id));
 
@@ -100,6 +109,10 @@ class UsefulLinkController extends Controller
     public function destroy(Useful_link $link)
     {
         $this->service->remove($link->id);
+        if($link->file_id){
+            $file=$this->fileservice->deleteStorage($link->file_id);
+         $file->delete();
+        }
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

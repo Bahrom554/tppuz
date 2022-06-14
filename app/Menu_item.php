@@ -13,7 +13,7 @@ class Menu_item extends Model
         return $this->hasMany(self::class, 'menu_item_parent_id', 'id');
     }
     public function file(){
-        return $this->belongsTo(File::class,'file_id','id');
+        return $this->belongsTo(Image::class,'file_id','id');
     }
 
     public function parent()

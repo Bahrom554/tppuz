@@ -19,7 +19,7 @@ class CreateBannersTable extends Migration
             $table->string('link');
             $table->integer('sort');
             $table->boolean('status');
-            $table->unsignedInteger('file_id');
+            $table->unsignedInteger('file_id')->nullable();
             $table->integer('target');
             $table->unsignedInteger('lang');
             $table->string('lang_hash');

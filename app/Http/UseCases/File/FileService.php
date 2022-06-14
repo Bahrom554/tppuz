@@ -2,16 +2,17 @@
 
 namespace App\Http\UseCases\File;
 
-use App\File;
+use App\Image;
 use App\Http\Resources\File\FileResource;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class FileService
 {
     public function create($request)
     {
-        if(!$request->hasFile('image')) return Null;
+        if (!$request->hasFile('image')) return Null;
         request()->validate([
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -20,7 +21,7 @@ class FileService
         $slug = rand();
         $new_name = $slug . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('/uploads/image/' . $fname), $new_name);
-        $file = File::make([
+        $file = Image::make([
             'title' => $image->getClientOriginalName(),
             'description' => $image->getClientOriginalName(),
             'file' => $new_name,
@@ -33,17 +34,23 @@ class FileService
         ]);
         $file->saveorfail();
         return $file->id;
-
-
     }
-//    public function edit($id, $request){
-//        if(!$request->hasFile('image')) return ;
-//        $file =File::findOrFail($id);
-//        File::delete($file->file);
-//
-//
-//
-//    }
 
 
+    public function deleteStorage($id)
+    {
+        $file = Image::findOrFail($id);
+        $path = public_path() . "/uploads/image/" . $file->folder . '/' . $file->file;
+        unlink($path);
+        return $file;
+    }
+
+    public function update($request , $id){
+        $file =$this->deleteStorage($id);
+        request()->validate([
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $image = $request->file('image');
+        $image->move(public_path( "/uploads/image/" . $file->folder ), $file->file);
+    }
 }
