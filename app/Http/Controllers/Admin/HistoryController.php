@@ -21,6 +21,8 @@ class HistoryController extends Controller
     {
         $this->service = $service;
         $this->fileservice =$fileservice;
+        $this->middleware("can:redactor");
+        $this->middleware("can:moderator")->except(["store","index"]);
     }
     /**
      * Display a listing of the resource.
